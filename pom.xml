@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.beetlerat.database</groupId>
+    <artifactId>MemoryStick</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!--Настройки компиляции-->
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source><!--На какой версии java написан код-->
+        <maven.compiler.target>1.8</maven.compiler.target><!--В байткод какой jvm компилировать написанный код-->
+    </properties>
+
+    <dependencies>
+        <!-- Зависимость для работы с mySql через код -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.26</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

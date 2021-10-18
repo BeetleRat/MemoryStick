@@ -1,2 +1,6 @@
 # Compiled class file
 *.class
+# Игнорировать папку test
+/test
+# Игнорировать папку target
+/target
