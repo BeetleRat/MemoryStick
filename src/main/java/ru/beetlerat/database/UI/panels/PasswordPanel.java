@@ -22,16 +22,11 @@ public class PasswordPanel extends JDialog {
     // Поля ввода
     JTextField userTextField;
     JPasswordField passwordTextField;
-    // Панели требующие логин в БД
-    DefinitionPanel definitionPanel;
-    WordPanel wordPanel;
-    // Создатель диалогового окна
-    JFrame owner;
 
-    public PasswordPanel(JFrame owner, DefinitionPanel definitionPanel,WordPanel wordPanel) {
+
+    public PasswordPanel(JFrame owner) {
         // Создание диалогового с именем "Подключение к базе данных" окна от родительского окна parent
         super(owner, "Подключение к базе данных");// Вызов конструктора суперкласса
-        this.owner=owner; // Сохранение создателя
         // Слушатель закрытия окна по нажатию крестика
         addWindowListener(new WindowAdapter() {
             @Override
@@ -44,16 +39,12 @@ public class PasswordPanel extends JDialog {
         setSize(450,200);
         setResizable(false); // Запретить изменять размер пользователю
 
-        // Сохранение панелей требующих доступ к БД
-        this.definitionPanel=definitionPanel;
-        this.wordPanel=wordPanel;
-
         createElements(); // Создать элементы GPU
         addListeners(); // Добавить слушателей
         addElementsToDialog(); // Добавить элементы в диалоговое окно
 
         // Запретить работу с основным окном
-        this.owner.setEnabled(false);
+        owner.setEnabled(false);
     }
 
     // Создать элементы GPU
@@ -78,55 +69,6 @@ public class PasswordPanel extends JDialog {
 
     // Добавление слушателей
     private void addListeners(){
-        // Анонимный класс слушателя нажатия enter в текстовых полях и нажатия кнопки ok
-        ActionListener textFieldListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Сбросить границы
-                userTextField.setBorder(BorderFactory.createLineBorder(Color.black,1));
-                passwordTextField.setBorder(BorderFactory.createLineBorder(Color.black,1));
-
-                String user=userTextField.getText();
-                String pass=passwordTextField.getText();
-                if(user.equals("")){
-                    // Установить красную границу
-                    userTextField.setBorder(BorderFactory.createLineBorder(Color.RED,2));
-                }
-                else {
-                    if(pass.equals("")){
-                        // Установить красную границу
-                        passwordTextField.setBorder(BorderFactory.createLineBorder(Color.RED,2));
-                    }
-                    else {
-                        try {
-                            // Передать данные для входа в БД панелям
-                            definitionPanel.setDao(new DefinitionsDAO(user,pass));
-                            wordPanel.setDao(new WordsDAO(user,pass));
-
-                            dispose(); // Закрыть окно, если произошло подключение к БД
-                            // Разрешить работать с основным окном
-                            owner.setEnabled(true);
-                            // Костыль, что б окошко один раз показалось выше всех окон
-                            owner.setAlwaysOnTop(true);
-                            owner.setAlwaysOnTop(false);
-
-                        } catch (SQLException throwables) {
-                            // Установить красную границу
-                            userTextField.setBorder(BorderFactory.createLineBorder(Color.RED,2));
-                            passwordTextField.setBorder(BorderFactory.createLineBorder(Color.RED,2));
-
-                            userTextField.setText("Некорректыне данные");
-                            passwordTextField.setText("Некорректыне данные");
-
-                            System.out.println("Ошибка БД: "+throwables);
-                        }
-                    }
-                }
-            }
-        };
-        userTextField.addActionListener(textFieldListener);
-        passwordTextField.addActionListener(textFieldListener);
-        okButton.addActionListener(textFieldListener);
         // Завершить программу по нажатии кнопки cancel
         cancelButton.addActionListener((e)->System.exit(0));
     }
@@ -186,5 +128,16 @@ public class PasswordPanel extends JDialog {
         add(passwordTextField);
         add(cancelButton);
         add(okButton);
+    }
+
+    // Геттеры кнопик ok и текстовых полей, для обработки их вне диалогового окна
+    public JButton getOkButton() {
+        return okButton;
+    }
+    public JTextField getUserTextField() {
+        return userTextField;
+    }
+    public JPasswordField getPasswordTextField() {
+        return passwordTextField;
     }
 }
